@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Meu Treino</title>
+<style>
+:root{--bg:#0f1115;--card:#181b22;--bd:#262a33;--tx:#eceef2;--mu:#9097a5;--ac:#e8638b;--ok:#4fc08d;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px)}
+:root[data-theme="light"]{--bg:#f5f6f8;--card:#fff;--bd:#e1e4ea;--tx:#1b1e25;--mu:#6b7280}
+@media(prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#f5f6f8;--card:#fff;--bd:#e1e4ea;--tx:#1b1e25;--mu:#6b7280}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+main{max-width:720px;margin:0 auto;padding:16px}
+h1{font-size:1.5rem;margin:.2rem 0}h2{font-size:1.1rem;margin:1.2rem 0 .6rem}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:16px;margin-bottom:12px}
+.mu{color:var(--mu);font-size:.9rem}.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+button{font:inherit;color:var(--tx);background:var(--bd);border:0;border-radius:12px;padding:12px 16px;min-height:44px;cursor:pointer;transition:.15s}
+button.p{background:var(--ac);color:#fff;font-weight:600}button.done{background:var(--ok);color:#06231a;font-weight:600}
+.chip{padding:8px 14px;min-height:38px;border-radius:999px;white-space:nowrap}.chip.on{background:var(--ac);color:#fff}
+.scroll{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px;margin-bottom:8px}
+.bar{height:10px;background:var(--bd);border-radius:9px;overflow:hidden;margin:8px 0}.bar i{display:block;height:100%;background:var(--ac);transition:width .3s}
+input{font:inherit;width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--bd);background:var(--card);color:var(--tx);margin-bottom:10px}
+nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:var(--card);border-top:1px solid var(--bd);padding-bottom:env(safe-area-inset-bottom,0px)}
+nav button{flex:1;border-radius:0;background:none;padding:14px 4px;font-size:.85rem;color:var(--mu)}nav button.on{color:var(--ac);font-weight:600}
+.chip.fin{background:var(--ok);color:#06231a;font-weight:600}.chip.fin.on{outline:2px solid var(--tx)}button:disabled{opacity:.5;cursor:not-allowed}.lk{display:inline-block;background:var(--bd);color:var(--tx);border-radius:12px;padding:12px 16px;text-decoration:none}
+a{color:var(--ac)}.avb{position:fixed;top:calc(10px + env(safe-area-inset-top,0px));right:12px;width:42px;height:42px;min-height:0;padding:0;border-radius:50%;overflow:hidden;z-index:5;background:var(--ac);color:#fff;font-weight:700}.avb img{width:100%;height:100%;object-fit:cover}
+.ex{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.ex b{display:block}
+.tag{font-size:.75rem;background:var(--bd);padding:2px 8px;border-radius:99px;color:var(--mu)}
+#md{position:fixed;inset:0;background:#000a;display:none;align-items:flex-end;justify-content:center;z-index:9}
+#md.on{display:flex}#md>div{background:var(--card);width:100%;max-width:720px;max-height:92%;overflow:auto;border-radius:20px 20px 0 0;padding:20px 16px calc(20px + env(safe-area-inset-bottom,0px))}
+.ph{background:var(--bd);border-radius:14px;padding:22px;text-align:center;margin:10px 0}
+ul,ol{padding-left:20px;margin:.3rem 0}#tm{font-size:2.4rem;font-weight:700;text-align:center}
+</style></head><body><main id="app"></main>
+<nav><button data-v="home">Início</button><button data-v="week">Semana</button><button data-v="ex">Exercícios</button><button data-v="rest">Descanso</button></nav>
+<div id="md"><div id="mc"></div></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="config.js"></script>
+<script>
+const E={
+cf:["Cadeira Flexora","Pernas","Cadeira flexora","Posterior de coxa","3","12–15","60s",["Ajuste o encosto e o apoio dos tornozelos.","Flexione os joelhos puxando os calcanhares para baixo.","Volte devagar, sem soltar o peso."],["Usar impulso","Tirar o quadril do banco"],"Controle a volta por 2 a 3 segundos."],
+mf:["Mesa Flexora","Pernas","Mesa flexora","Posterior de coxa, glúteos","3","12–15","60s",["Deite de bruços com o joelho alinhado ao eixo.","Dobre os joelhos levando os calcanhares aos glúteos.","Desça devagar até quase esticar."],["Levantar o quadril","Carga alta demais"],"Mantenha o quadril colado no banco."],
+ep:["Elevação Pélvica na Máquina","Glúteos","Máquina de elevação pélvica","Glúteos, posterior","3","10–12","90s",["Sente-se com as costas apoiadas e a barra no quadril.","Empurre o quadril para cima apertando os glúteos.","Desça devagar sem perder a tensão."],["Arquear a lombar no topo","Pés mal posicionados"],"Faça uma pausa de 1 segundo no topo."],
+gm:["Glúteo na Máquina","Glúteos","Máquina de glúteo (coice)","Glúteos","3","12–15 por perna","60s",["Apoie o peito e posicione o pé na plataforma.","Estenda a perna para trás empurrando com o glúteo.","Volte controlando o movimento."],["Balançar o tronco","Usar a lombar"],"Pense em empurrar com o calcanhar."],
+ab:["Cadeira Abdutora","Glúteos","Cadeira abdutora","Glúteos (lateral), abdutores","3","15–20","45s",["Sente-se com as costas bem apoiadas.","Abra as pernas contra a resistência.","Feche devagar sem encostar os pesos."],["Jogar o corpo para frente","Movimento rápido"],"Inclinar levemente o tronco foca mais o glúteo."],
+lp:["Leg Press 45°","Pernas","Leg Press 45°","Quadríceps, glúteos","3","10–12","90s",["Pés na largura dos ombros, costas apoiadas.","Desça até cerca de 90° nos joelhos.","Empurre sem travar os joelhos."],["Tirar o quadril do banco","Travar os joelhos no topo"],"Comece com carga leve na readaptação."],
+pa:["Panturrilha na Máquina","Pernas","Máquina de panturrilha","Panturrilhas","3","15–20","45s",["Apoie a ponta dos pés na plataforma.","Suba o máximo que conseguir.","Desça alongando bem."],["Movimento curto","Quicar na descida"],"Pause 1 segundo no alto."],
+pf:["Puxada Frontal","Costas","Polia alta (puxada)","Dorsais, bíceps","3","10–12","90s",["Segure a barra um pouco além dos ombros.","Puxe a barra até a altura do peito.","Volte devagar com os braços estendidos."],["Puxar atrás da nuca","Balançar o tronco"],"Leve os cotovelos para baixo e para trás."],
+rb:["Remada Baixa","Costas","Polia baixa","Dorsais, romboides","3","10–12","90s",["Sente-se com a coluna reta e joelhos levemente flexionados.","Puxe o triângulo até o abdômen.","Estenda os braços devagar."],["Curvar as costas","Usar o tronco como impulso"],"Aproxime as escápulas ao puxar."],
+ra:["Remada Articulada","Costas","Remada articulada","Dorsais, romboides","3","10–12","90s",["Apoie o peito no suporte.","Puxe as manoplas levando os cotovelos para trás.","Retorne com controle."],["Encolher os ombros","Soltar o peso"],"Mantenha o peito colado no apoio."],
+pu:["Pullover na Máquina","Costas","Pullover (máquina)","Dorsais","3","12–15","60s",["Ajuste o assento e apoie os cotovelos.","Leve os braços para baixo em arco.","Volte devagar até sentir alongar."],["Usar impulso","Carga excessiva"],"Foque em sentir as costas, não os braços."],
+fp:["Face Pull","Ombros","Polia com corda","Deltoide posterior, trapézio","2","12–15","60s",["Ajuste a polia na altura do rosto.","Puxe a corda em direção ao rosto abrindo os cotovelos.","Volte devagar."],["Carga alta demais","Inclinar o corpo para trás"],"Use peso leve e foque na postura."],
+ro:["Rosca Direta (Máquina ou Polia)","Braços","Máquina ou polia","Bíceps","2","12–15","60s",["Cotovelos junto ao corpo.","Flexione os braços até o topo.","Desça devagar."],["Balançar o corpo","Subir os cotovelos"],"Mantenha os punhos firmes."],
+tr:["Tríceps na Polia","Braços","Polia alta","Tríceps","2","12–15","60s",["Cotovelos junto ao corpo.","Estenda os braços para baixo.","Volte até 90° sem mexer os cotovelos."],["Abrir os cotovelos","Usar o peso do corpo"],"Só o antebraço se move."],
+ex:["Cadeira Extensora","Pernas","Cadeira extensora","Quadríceps","3","12–15","60s",["Joelho alinhado ao eixo da máquina.","Estenda as pernas até quase travar.","Desça devagar."],["Chutar o peso","Tirar o quadril do banco"],"Pause 1 segundo no topo."],
+hk:["Hack Machine","Pernas","Hack machine","Quadríceps, glúteos","3","10–12","90s",["Costas apoiadas e pés na largura dos ombros.","Desça com controle até 90°.","Empurre sem travar os joelhos."],["Joelhos para dentro","Descer pouco"],"Pés mais altos enfatizam os glúteos."],
+sm:["Agachamento no Smith","Pernas","Smith","Quadríceps, glúteos","3","10–12","90s",["Barra nos ombros, pés um pouco à frente.","Agache mantendo as costas retas.","Suba empurrando o chão."],["Joelhos para dentro","Curvar a lombar"],"Comece só com a barra."],
+el:["Elevação Lateral na Máquina","Ombros","Máquina de elevação lateral","Deltoide lateral","3","12–15","60s",["Ajuste o assento ao nível dos ombros.","Eleve os braços até a linha do ombro.","Desça devagar."],["Subir demais","Usar o tronco"],"Carga leve, movimento limpo."],
+am:["Abdominal na Máquina","Abdômen","Máquina abdominal","Abdômen","2","12–15","45s",["Sente-se e segure as manoplas.","Flexione o tronco contraindo o abdômen.","Volte devagar."],["Puxar com os braços","Movimento rápido"],"Expire ao contrair."],
+pr:["Prancha","Abdômen","Peso do corpo","Abdômen, core","2","20–30 segundos","45s",["Apoie antebraços e pontas dos pés.","Mantenha o corpo em linha reta.","Respire normalmente e segure."],["Quadril caído","Quadril muito alto"],"Contraia abdômen e glúteos."],
+st:["Stiff com Halteres","Pernas","Halteres","Posterior, glúteos","2","10–12","90s",["Halteres à frente das coxas, joelhos levemente flexionados.","Leve o quadril para trás descendo os halteres.","Suba apertando os glúteos."],["Curvar a coluna","Descer demais"],"Mantenha os halteres próximos às pernas."]};
+const K=Object.keys(E),g=k=>({id:k,name:E[k][0],cat:E[k][1],eq:E[k][2],mu:E[k][3],s:E[k][4],r:E[k][5],rest:E[k][6],ins:E[k][7],mis:E[k][8],tip:E[k][9],media:null});
+const W=[["Segunda-feira","Glúteos + Posterior","cf mf ep gm ab lp pa"],["Terça-feira","Costas + Braços Leves","pf rb ra pu fp ro tr"],["Quarta-feira","Quadríceps + Glúteos","ex lp hk sm ab ep pa"],["Quinta-feira","Costas + Ombros + Abdômen","pf ra rb el fp am pr"],["Sexta-feira","Glúteos + Posterior","ep cf mf gm ab lp st"],["Sábado","Pernas Completo + Abdômen","lp ex cf hk ab gm pa am"]].map(d=>({n:d[0],t:d[1],ids:d[2].split(" ")}));
+const $=s=>document.querySelector(s),app=$("#app");
+// ---- Brasília time (America/Sao_Paulo); week = Sunday 00:00 -> Saturday ----
+const WD=["domingo","segunda-feira","terça-feira","quarta-feira","quinta-feira","sexta-feira","sábado"];
+const dt=s=>new Date(s+"T00:00:00Z"),add=(s,n)=>{const d=dt(s);d.setUTCDate(d.getUTCDate()+n);return d.toISOString().slice(0,10)};
+const isoWeek=s=>{const d=dt(s);d.setUTCDate(d.getUTCDate()+4-(d.getUTCDay()||7));const y=d.getUTCFullYear();return y+"-W"+String(Math.ceil(((d-Date.UTC(y,0,1))/864e5+1)/7)).padStart(2,"0")};
+function nowBR(){let o="";try{o=new URLSearchParams(location.search).get("hoje")||localStorage.getItem("hoje")||""}catch(e){}// test override
+ if(/^\d{4}-\d{2}-\d{2}$/.test(o))return o;
+ const p=Object.fromEntries(new Intl.DateTimeFormat("en-CA",{timeZone:"America/Sao_Paulo",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date()).map(x=>[x.type,x.value]));
+ return p.year+"-"+p.month+"-"+p.day}
+let TODAY,SUN,WK,TI;// TI: 0=Monday..5=Saturday, -1=Sunday (rest)
+function calc(){TODAY=nowBR();const w=dt(TODAY).getUTCDay();TI=w==0?-1:w-1;SUN=add(TODAY,-w);WK=isoWeek(add(SUN,1))}
+calc();
+let v="home",day=Math.max(TI,0),q="",f="Todos",done={},fin={},busy=false,msg="",last="";
+const ERR="Não foi possível salvar seu progresso. Tente novamente.";
+// small local cache (current week only) so the UI renders instantly before the database answers
+const cache=()=>{try{localStorage.setItem(CK,JSON.stringify({wk:WK,done,fin,last}))}catch(e){}};
+function loadCache(){try{const c=JSON.parse(localStorage.getItem(CK)||"{}");last=c.last||"";if(c.wk==WK){done=c.done||{};fin=c.fin||{}}}catch(e){}}// per-user key
+// loads the current week once; one document per workout_date + exercise_id (no duplicates)
+const C=window.TREINO_CONFIG||{},TB="workout_completions",TD="workout_days",WS=()=>add(SUN,1);// WS = Monday of the current week
+// official Supabase client (created only if the config is filled in)
+let sb=null;try{if(window.supabase&&C.SUPABASE_URL&&C.SUPABASE_ANON_KEY&&!/SEU-PROJETO/.test(C.SUPABASE_URL))sb=window.supabase.createClient(C.SUPABASE_URL,C.SUPABASE_ANON_KEY)}catch(e){}
+// loads the current week once from Supabase
+async function init(){try{if(!sb)throw 0;const[a,b]=await Promise.all([sb.from(TB).select("*").eq("week_identifier",WK),sb.from(TD).select("*").eq("week_start",WS())]);if(a.error||b.error)throw 0;const data=a.data,n={},f2={};
+ b.data.forEach(o=>{const i=WD.indexOf(o.workout_day)-1;if(i>=0&&o.completed)f2[i]=o.completed_at||WS()});
+ data.forEach(o=>{const i=WD.indexOf(o.weekday)-1;if(i>=0&&o.completed){n[dk(i,o.exercise_id)]=1;if(o.workout_date>last)last=o.workout_date}});
+ done=n;fin=f2;cache();msg=""}catch(e){msg=ERR}draw()}
+const fdate=iso=>new Date(iso).toLocaleDateString("pt-BR",{timeZone:"America/Sao_Paulo"});
+// "Finalizar treino" box: disabled until every exercise of the day is checked
+function fbox(d){const all=W[d].ids.every(i=>isD(d,i));
+ if(fin[d])return`<div class="card" style="border-color:var(--ok)"><b style="color:var(--ok)">Treino concluído ✓</b><div class="mu">Finalizado em ${fdate(fin[d])}</div></div>`;
+ return`<div class="card"><button class="p" ${all?"":"disabled"} onclick="fim(${d})">Finalizar treino</button>${all?"":'<div class="mu" style="margin-top:8px">Complete todos os exercícios antes de finalizar o treino.</div>'}</div>`}
+// one row per (week_start, workout_day); unique key prevents duplicates
+async function fim(d){if(busy||fin[d])return;if(!W[d].ids.every(i=>isD(d,i))){msg="Complete todos os exercícios antes de finalizar o treino.";draw();return}
+ busy=true;const at=new Date().toISOString();
+ try{if(!sb)throw 0;const r=await sb.from(TD).upsert({user_id:UID,week_start:WS(),workout_day:WD[d+1],completed:true,completed_at:at},{onConflict:"user_id,week_start,workout_day",ignoreDuplicates:true});
+  if(r.error)throw r.error;fin[d]=at;cache();msg="Treino finalizado com sucesso! ✓"}catch(e){msg=ERR}
+ busy=false;draw()}
+function wkCard(){const t=W.reduce((a,d)=>a+d.ids.length,0),n=Object.keys(done).length,nf=Object.keys(fin).length;
+ return`<div class="card"><b>Progresso da semana: ${nf}/${W.length} treinos concluídos${nf==W.length?" · Semana concluída! 🎉":""}</b><div class="mu">${n} de ${t} exercícios concluídos</div><div class="bar"><i style="width:${n/t*100}%"></i></div>${last?`<div class="mu">Último treino concluído: ${last.split("-").reverse().join("/")}</div>`:""}</div>`}
+const dk=(d,id)=>d+":"+id,isD=(d,id)=>!!done[dk(d,id)];
+function prog(d){const n=W[d].ids.filter(i=>isD(d,i)).length,t=W[d].ids.length;return`<div class="bar"><i style="width:${n/t*100}%"></i></div><div class="mu">${n} de ${t} exercícios concluídos</div>`}
+function card(id,d){const x=g(id),ok=d!=null&&isD(d,id);return`<div class="card"><div class="ex"><div><b>${x.name}</b><div class="mu">${x.s} séries × ${x.r} · Descanso ${x.rest}</div><div class="mu">${x.eq}</div></div><span class="tag">${x.cat}</span></div><div class="row" style="margin-top:10px"><button onclick="info('${id}')">Como Fazer</button>${d!=null?`<button class="${ok?"done":"p"}" onclick="tog(${d},'${id}')">${ok?"Exercício concluído ✓":"Concluir exercício"}</button>`:""}</div></div>`}
+async function tog(d,id){if(busy)return;if(fin[d]){msg="Este treino já foi finalizado.";draw();return}busy=true;const k=dk(d,id),on=!done[k],date=add(SUN,d+1);
+ try{if(!sb)throw 0;let r;
+  if(on)r=await sb.from(TB).upsert({user_id:UID,workout_date:date,weekday:WD[d+1],exercise_id:id,exercise_name:E[id][0],completed:true,completed_at:new Date().toISOString(),week_identifier:WK},{onConflict:"user_id,workout_date,exercise_id"});
+  else r=await sb.from(TB).delete().eq("workout_date",date).eq("exercise_id",id);
+  if(r.error)throw r.error;msg=""}catch(e){msg=ERR}
+ if(on){done[k]=1;if(date>last)last=date}else delete done[k];cache();busy=false;draw()}
+function info(id){const x=g(id);$("#mc").innerHTML=`<div class="row" style="justify-content:space-between"><h1>${x.name}</h1><button onclick="closeM()">Fechar</button></div><div class="ph"><b>Tutorial visual</b><div class="mu">Veja a demonstração do movimento.</div></div><p><b>Equipamento:</b> ${x.eq}<br><b>Músculos:</b> ${x.mu}<br><b>Séries:</b> ${x.s} · <b>Repetições:</b> ${x.r} · <b>Descanso:</b> ${x.rest}</p><h2>Como fazer</h2><ol>${x.ins.map(i=>`<li>${i}</li>`).join("")}</ol><h2>Erros comuns</h2><ul>${x.mis.map(i=>`<li>${i}</li>`).join("")}</ul><h2>Dica de execução</h2><p>${x.tip}</p><h2>Respiração</h2><p>Expire no momento do esforço e inspire ao voltar. Não prenda o ar.</p><h2>Vídeo de demonstração</h2><p class="mu">Opcional. Abre uma busca no YouTube pelo nome do exercício; prefira canais de profissionais de educação física.</p><a class="lk" href="https://www.youtube.com/results?search_query=${encodeURIComponent(x.name+" como fazer execução correta")}" target="_blank" rel="noopener">▶ Buscar demonstração no YouTube</a>`;$("#md").classList.add("on")}
+function closeM(){$("#md").classList.remove("on")}$("#md").onclick=e=>{if(e.target.id=="md")closeM()};
+const days=()=>`<div class="scroll">${W.map((d,i)=>`<button class="chip ${i==day?"on":""}${fin[i]?" fin":""}" onclick="day=${i};draw()">${d.n.split("-")[0]}${fin[i]?" ✓":""}</button>`).join("")}</div>`;
+function draw(){if(!UID){adraw();return}document.querySelector("nav").style.display="flex";document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("on",b.dataset.v==v));const D=W[day];let h="";
+if(v=="home")h=`<p class="mu">Olá${PF.display_name?", "+esc(PF.display_name):""}! Bora treinar 💪</p><h1>Meu Treino</h1><div class="card">${TI<0?'<div class="mu">Hoje</div><h1>Descanso</h1><div>Nova semana começa amanhã. Bom descanso!</div>':'<div class="mu">Treino de Hoje</div><h1>'+W[TI].n+'</h1><div>'+W[TI].t+'</div><div class="mu">'+W[TI].ids.length+' exercícios</div>'+prog(TI)}<div class="row"><button class="p" onclick="v='week';draw()">Começar Treino</button><button onclick="v='ex';draw()">Ver Exercícios</button></div></div><div class="card"><b>Período de readaptação</b><p class="mu">Comece com cargas leves e priorize a execução correta dos exercícios. Aumente a carga gradualmente conforme seu corpo se readapta.</p></div><h2>Progresso da semana</h2>${wkCard()}${W.map((d,i)=>`<div class="card" onclick="day=${i};v='week';draw()"><b>${d.n}</b> <span class="mu">· ${d.t}</span>${fin[i]?` <b style="color:var(--ok)">Treino concluído ✓</b>`:""}${prog(i)}</div>`).join("")}`;
+else if(v=="week")h=`<h1>${D.n}</h1><div class="mu">${D.t}</div>${days()}${prog(day)}<div style="height:10px"></div>${D.ids.map(i=>card(i,day)).join("")}${fbox(day)}`;
+else if(v=="ex"){const L=K.filter(k=>E[k][0].toLowerCase().includes(q.toLowerCase())&&(f=="Todos"||E[k][1]==f));h=`<h1>Exercícios</h1><input id="s" placeholder="Buscar exercício..." value="${q}" oninput="q=this.value;list()"><div class="scroll">${["Todos","Glúteos","Pernas","Costas","Ombros","Abdômen","Braços"].map(c=>`<button class="chip ${c==f?"on":""}" onclick="f='${c}';draw()">${c}</button>`).join("")}</div><div id="l"></div>`}
+else if(v=="perfil")h=perfilH();else h=`<h1>Descanso</h1><div class="card"><div id="tm">01:00</div><div class="scroll" style="justify-content:center;margin-top:8px">${[30,45,60,90,120].map(s=>`<button class="chip ${s==T.d?"on":""}" onclick="setT(${s})">${s}s</button>`).join("")}</div><div class="row" style="justify-content:center"><button class="p" onclick="startT()">Iniciar</button><button onclick="pauseT()">Pausar</button><button onclick="resetT()">Reiniciar</button></div></div>`;
+app.innerHTML=avBtn()+(msg?'<div class="card" style="border-color:var(--ac)">'+msg+'</div>':"")+h;if(v=="ex")list();if(v=="rest")showT()}
+function list(){const L=K.filter(k=>E[k][0].toLowerCase().includes(q.toLowerCase())&&(f=="Todos"||E[k][1]==f));$("#l").innerHTML=L.length?L.map(k=>card(k,null)).join(""):'<p class="mu">Nenhum exercício encontrado.</p>'}
+let T={d:60,l:60,i:null};
+const showT=()=>{const e=$("#tm");if(e)e.textContent=String(Math.floor(T.l/60)).padStart(2,"0")+":"+String(T.l%60).padStart(2,"0")};
+function setT(s){clearInterval(T.i);T={d:s,l:s,i:null};draw()}
+function startT(){if(T.i)return;if(T.l<=0)T.l=T.d;T.i=setInterval(()=>{T.l--;showT();if(T.l<=0){clearInterval(T.i);T.i=null;try{navigator.vibrate&&navigator.vibrate(300)}catch(e){}}},1000)}
+function pauseT(){clearInterval(T.i);T.i=null}
+function resetT(){pauseT();T.l=T.d;showT()}
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{v=b.dataset.v;draw();scrollTo(0,0)});
+// ================= Auth, profile and per-user session (Supabase Auth) =================
+let UID=null,PF={display_name:"",avatar_url:"",theme_color:"#e8638b"},av="login",amsg="",AE="",AN="",manual=false,CK="treino_cache_x";
+const THEMES={Rosa:"#e8638b",Roxo:"#8b5cf6",Azul:"#3b82f6",Verde:"#10b981",Laranja:"#f59e0b",Vermelho:"#ef4444"};
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const em=e=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
+function aerr(e,def){console.error(e);const m=((e&&e.message)||"").toLowerCase();
+ if(m.includes("invalid login"))return"E-mail ou senha inválidos.";if(m.includes("already")||m.includes("registered"))return"Este e-mail já está cadastrado.";
+ if(m.includes("least"))return"A senha deve ter pelo menos 6 caracteres.";if(m.includes("rate")||m.includes("too many"))return"Muitas tentativas. Aguarde um pouco e tente novamente.";
+ if(m.includes("confirm"))return"Confirme seu e-mail pelo link que enviamos.";return def}
+const applyTheme=()=>document.documentElement.style.setProperty("--ac",PF.theme_color||THEMES.Rosa);
+const avBtn=()=>`<button class="avb" onclick="v='perfil';draw()" aria-label="Meu perfil">${PF.avatar_url?'<img src="'+esc(PF.avatar_url)+'" alt="">':esc((PF.display_name||"?")[0].toUpperCase())}</button>`;
+function go(x){av=x;amsg="";adraw()}
+function adraw(){document.querySelector("nav").style.display="none";let o=$("#ae");if(o)AE=o.value;o=$("#an");if(o)AN=o.value;const r=av=="reg";
+ app.innerHTML=`<h1 style="margin-top:8vh">Meu Treino</h1><p class="mu">${r?"Crie sua conta":"Entre para ver seu treino"}</p>${amsg?'<div class="card" style="border-color:var(--ac)">'+amsg+'</div>':""}<div class="card">${r?'<input id="an" placeholder="Nome" maxlength="40" autocomplete="name" value="'+esc(AN)+'">':""}<input id="ae" type="email" placeholder="E-mail" autocomplete="email" value="${esc(AE)}"><input id="ap" type="password" placeholder="Senha" autocomplete="${r?"new-password":"current-password"}">${r?'<input id="ap2" type="password" placeholder="Confirmar senha" autocomplete="new-password">':""}<button class="p" style="width:100%" onclick="${r?"doReg()":"doLogin()"}">${r?"Criar conta":"Entrar"}</button><button style="width:100%;margin-top:8px" onclick="google()">${r?"Continuar com Google":"Entrar com Google"}</button></div><p class="mu" style="text-align:center">${r?"Já tem uma conta? <a href=\"#\" onclick=\"go('login');return false\">Entrar</a>":"<a href=\"#\" onclick=\"recover();return false\">Esqueci minha senha</a><br>Não tem uma conta? <a href=\"#\" onclick=\"go('reg');return false\">Criar conta</a>"}</p>`}
+async function doLogin(){const e=$("#ae").value.trim(),p=$("#ap").value;AE=e;if(!e||!p){amsg="Preencha todos os campos.";return adraw()}if(!em(e)){amsg="Informe um e-mail válido.";return adraw()}
+ const{error}=await sb.auth.signInWithPassword({email:e,password:p});if(error){amsg=aerr(error,"Não foi possível entrar. Tente novamente.");adraw()}}
+async function doReg(){const n=$("#an").value.trim(),e=$("#ae").value.trim(),p=$("#ap").value,p2=$("#ap2").value;AN=n;AE=e;
+ if(!n||!e||!p||!p2){amsg="Preencha todos os campos.";return adraw()}if(!em(e)){amsg="Informe um e-mail válido.";return adraw()}if(p!=p2){amsg="As senhas não coincidem.";return adraw()}
+ const{data,error}=await sb.auth.signUp({email:e,password:p,options:{data:{display_name:n},emailRedirectTo:location.origin+location.pathname}});
+ if(error){amsg=aerr(error,"Não foi possível criar sua conta.");return adraw()}
+ if(data.user&&data.user.identities&&!data.user.identities.length){amsg="Este e-mail já está cadastrado.";return adraw()}
+ if(!data.session){av="login";amsg="Conta criada com sucesso! Confirme seu e-mail pelo link que enviamos para poder entrar.";adraw()}}
+async function google(){const{error}=await sb.auth.signInWithOAuth({provider:"google",options:{redirectTo:location.origin+location.pathname}});if(error){amsg=aerr(error,"Não foi possível entrar com o Google.");adraw()}}
+async function recover(){const e=$("#ae").value.trim();AE=e;if(!em(e)){amsg="Informe seu e-mail para recuperar a senha.";return adraw()}
+ const{error}=await sb.auth.resetPasswordForEmail(e,{redirectTo:location.origin+location.pathname});amsg=error?aerr(error,"Não foi possível enviar o e-mail de recuperação."):"Se o e-mail estiver cadastrado, enviaremos um link para redefinir a senha.";adraw()}
+async function logout(){manual=true;await sb.auth.signOut()}
+// profile: RLS guarantees each user only reads/writes their own row
+async function loadUser(u){CK="treino_cache_"+u.id;done={};fin={};last="";loadCache();const m=u.user_metadata||{};
+ PF={display_name:m.display_name||m.full_name||m.name||"",avatar_url:"",theme_color:THEMES.Rosa};
+ try{const{data,error}=await sb.from("profiles").select("display_name,avatar_url,theme_color").eq("user_id",u.id).maybeSingle();if(error)throw error;
+  if(data){PF.display_name=data.display_name||PF.display_name;PF.avatar_url=data.avatar_url||"";PF.theme_color=data.theme_color||PF.theme_color}}
+ catch(e){console.error(e);msg="Não foi possível carregar seus dados."}
+ applyTheme();await init()}
+async function sess(ev,ses){const u=ses&&ses.user;
+ if(!u){if(UID&&!manual)amsg="Você foi desconectado. Entre novamente.";manual=false;UID=null;done={};fin={};last="";PF={display_name:"",avatar_url:"",theme_color:THEMES.Rosa};applyTheme();v="home";av="login";adraw();return}
+ if(u.id!=UID){UID=u.id;await loadUser(u)}
+ if(ev=="PASSWORD_RECOVERY"){v="perfil";msg="Defina sua nova senha abaixo."}
+ draw()}
+async function savePF(patch,ok,bad){try{const{error}=await sb.from("profiles").upsert({user_id:UID,...patch,updated_at:new Date().toISOString()});if(error)throw error;Object.assign(PF,patch);msg=ok}catch(e){console.error(e);msg=bad}}
+async function saveName(){const n=$("#pn").value.trim();if(!n){msg="Preencha todos os campos.";return draw()}await savePF({display_name:n},"Perfil atualizado com sucesso.","Não foi possível salvar o perfil.");draw()}
+async function setTheme(c){PF.theme_color=c;applyTheme();await savePF({theme_color:c},"Aparência atualizada.","Não foi possível salvar a aparência.");draw()}
+async function upAv(i){const f=i.files[0];if(!f)return;if(!/^image\/(jpeg|png|webp)$/.test(f.type)){msg="Use uma imagem JPG, PNG ou WEBP.";return draw()}if(f.size>2*1048576){msg="A imagem deve ter no máximo 2 MB.";return draw()}
+ try{const path=UID+"/avatar."+(f.type=="image/png"?"png":f.type=="image/webp"?"webp":"jpg");const{error}=await sb.storage.from("avatars").upload(path,f,{upsert:true,contentType:f.type});if(error)throw error;
+  await savePF({avatar_url:sb.storage.from("avatars").getPublicUrl(path).data.publicUrl+"?v="+Date.now()},"Foto atualizada com sucesso.","Não foi possível salvar a foto.")}catch(e){console.error(e);msg="Não foi possível enviar a foto."}draw()}
+async function chgPw(){const a=$("#n1").value,b=$("#n2").value;if(!a||!b){msg="Preencha todos os campos.";return draw()}if(a!=b){msg="As senhas não coincidem.";return draw()}if(a.length<6){msg="A senha deve ter pelo menos 6 caracteres.";return draw()}
+ const{error}=await sb.auth.updateUser({password:a});if(error)console.error(error);msg=error?"Não foi possível alterar a senha.":"Senha alterada com sucesso.";draw()}
+const perfilH=()=>`<h1>Meu perfil</h1><div class="card"><b>Editar perfil</b><input id="pn" placeholder="Nome" maxlength="40" value="${esc(PF.display_name)}" style="margin-top:8px"><button class="p" onclick="saveName()">Salvar nome</button><p class="mu">Foto de perfil (JPG, PNG ou WEBP, até 2 MB)</p><input id="pf" type="file" accept="image/jpeg,image/png,image/webp" onchange="upAv(this)"></div><div class="card"><b>Alterar senha</b><input id="n1" type="password" placeholder="Nova senha" autocomplete="new-password" style="margin-top:8px"><input id="n2" type="password" placeholder="Confirmar nova senha" autocomplete="new-password"><button class="p" onclick="chgPw()">Alterar senha</button></div><div class="card"><b>Personalizar aparência</b><div class="row" style="margin-top:8px">${Object.entries(THEMES).map(([n,c])=>`<button class="chip" style="background:${c};color:#fff;${c==PF.theme_color?"outline:2px solid var(--tx)":""}" onclick="setTheme('${c}')">${n}</button>`).join("")}</div></div><button style="width:100%" onclick="logout()">Sair</button>`;
+function boot(){document.querySelector("nav").style.display="none";try{localStorage.removeItem("treino_cache")}catch(e){}// drop old shared cache
+ if(!sb){app.innerHTML='<p class="card">Não foi possível carregar seus dados. Verifique a configuração do Supabase.</p>';return}
+ app.innerHTML='<p class="mu" style="padding:20px">Carregando...</p>';
+ sb.auth.onAuthStateChange((ev,ses)=>{setTimeout(()=>sess(ev,ses),0)})}
+boot();
+document.addEventListener("visibilitychange",()=>{if(document.hidden||!UID)return;const o=WK;calc();if(WK!=o){done={};fin={};last="";day=Math.max(TI,0);cache();init()}else draw()});
+</script></body></html>
