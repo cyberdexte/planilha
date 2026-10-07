@@ -129,6 +129,23 @@ body.noav{padding-bottom:0}body.noav main{max-width:none;padding:0;margin:0}
 #mt .mi{color:var(--ac);display:grid;place-items:center}#mt .mi svg{width:24px;height:24px}
 #mt p{flex:1;margin:0;font-size:.92rem;line-height:1.35;font-weight:500}
 #mt button{width:36px;min-height:36px;height:36px;padding:0;border:0;background:none;color:var(--mu);border-radius:50%}#mt button:hover{background:var(--card2);color:var(--tx)}
+/* ===== Administrador ===== */
+nav button[hidden]{display:none!important}
+textarea,select{font:inherit;width:100%;padding:12px 14px;border-radius:10px;border:1px solid var(--bd);background:var(--bg2);color:var(--tx);margin-bottom:10px}
+textarea{min-height:76px;resize:vertical}textarea:focus,select:focus{border-color:var(--ac);outline:0}
+.lb{display:block;color:var(--mu);font-size:.85rem;margin:8px 0 4px}
+.adg{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:12px 0}
+.ad{flex-direction:column;align-items:flex-start;justify-content:flex-start;text-align:left;gap:2px;padding:12px;min-height:96px;background:var(--card);border-radius:12px;font-size:.85rem}
+.ad b{font-family:var(--fd);font-style:italic;font-weight:800;font-size:1.05rem}
+.ad .ex{display:block;color:var(--mu);font-size:.8rem;line-height:1.3}
+.ad.on{border-color:var(--ac);background:color-mix(in srgb,var(--ac) 10%,var(--card))}
+.adx{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;background:var(--bg2);border:1px solid var(--bd);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.adx .gr{color:var(--mu);cursor:grab;user-select:none}.adx .ab{display:flex;flex-wrap:wrap;gap:6px}
+button.sm{min-height:36px;padding:6px 12px;font-size:.85rem}
+button.danger{color:#ff8a93}button.danger:hover{border-color:#ff8a93}
+.pkr{width:100%;flex-direction:column;align-items:flex-start;justify-content:flex-start;gap:2px;text-align:left;background:var(--card)}
+.okbox{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 10%,var(--card));color:var(--ok)}
+.errbox{border-color:#ff5c6a;background:color-mix(in srgb,#ff5c6a 10%,var(--card))}
 /* ===== Tablet / Desktop ===== */
 @media(min-width:640px){.wk{grid-template-columns:repeat(3,1fr)}.xl{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:1fr 1fr}.pc{grid-row:span 3}}
 @media(min-width:900px){
@@ -156,6 +173,7 @@ body.noav{padding-bottom:0}body.noav main{max-width:none;padding:0;margin:0}
 <button data-v="ex"><svg class="i" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg><span>Exercícios</span></button>
 <button data-v="rest"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 2h6"/></svg><span>Descanso</span></button>
 <button data-v="perfil"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg><span>Perfil</span></button>
+<button data-v="admin" id="navAdm" hidden><svg class="i" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg><span>Administrador</span></button>
 <button class="out" onclick="logout()"><svg class="i" viewBox="0 0 24 24"><path d="M9 21H5V3h4M16 17l5-5-5-5M21 12H9"/></svg><span>Sair</span></button></nav>
 <div id="md"><div id="mc"></div></div>
 <div id="mt" role="status" aria-live="polite"><span class="mi"><svg class="i" viewBox="0 0 24 24"><path d="M12 2c1 4 5 5 5 10a5 5 0 0 1-10 0c0-2 1-3 2-4 0 2 1 3 2 3 0-4-1-5 1-9z"/></svg></span><p id="mt-t"></p><button onclick="closeMt()" aria-label="Fechar mensagem"><svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
@@ -185,7 +203,7 @@ am:["Abdominal na Máquina","Abdômen","Máquina abdominal","Abdômen","2","12�
 pr:["Prancha","Abdômen","Peso do corpo","Abdômen, core","2","20–30 segundos","45s",["Apoie antebraços e pontas dos pés.","Mantenha o corpo em linha reta.","Respire normalmente e segure."],["Quadril caído","Quadril muito alto"],"Contraia abdômen e glúteos."],
 st:["Stiff com Halteres","Pernas","Halteres","Posterior, glúteos","2","10–12","90s",["Halteres à frente das coxas, joelhos levemente flexionados.","Leve o quadril para trás descendo os halteres.","Suba apertando os glúteos."],["Curvar a coluna","Descer demais"],"Mantenha os halteres próximos às pernas."]};
 const K=Object.keys(E),g=k=>({id:k,name:E[k][0],cat:E[k][1],eq:E[k][2],mu:E[k][3],s:E[k][4],r:E[k][5],rest:E[k][6],ins:E[k][7],mis:E[k][8],tip:E[k][9],media:null});
-const W=[["Segunda-feira","Glúteos + Posterior","cf mf ep gm ab lp pa"],["Terça-feira","Costas + Braços Leves","pf rb ra pu fp ro tr"],["Quarta-feira","Quadríceps + Glúteos","ex lp hk sm ab ep pa"],["Quinta-feira","Costas + Ombros + Abdômen","pf ra rb el fp am pr"],["Sexta-feira","Glúteos + Posterior","ep cf mf gm ab lp st"],["Sábado","Pernas Completo + Abdômen","lp ex cf hk ab gm pa am"]].map(d=>({n:d[0],t:d[1],ids:d[2].split(" ")}));
+const W0=[["Segunda-feira","Glúteos + Posterior","cf mf ep gm ab lp pa"],["Terça-feira","Costas + Braços Leves","pf rb ra pu fp ro tr"],["Quarta-feira","Quadríceps + Glúteos","ex lp hk sm ab ep pa"],["Quinta-feira","Costas + Ombros + Abdômen","pf ra rb el fp am pr"],["Sexta-feira","Glúteos + Posterior","ep cf mf gm ab lp st"],["Sábado","Pernas Completo + Abdômen","lp ex cf hk ab gm pa am"]].map(d=>({n:d[0],t:d[1],ids:d[2].split(" "),notes:""}));let W=W0;
 const $=s=>document.querySelector(s),app=$("#app");
 // Busca: normaliza (minúsculas, sem acentos, espaços colapsados) e exige que cada palavra digitada apareça em nome/equipamento/categoria/músculos
 const normalizeSearch=t=>String(t==null?"":t).normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/\s+/g," ").trim();
@@ -226,7 +244,7 @@ function nowBR(){let o="";try{o=new URLSearchParams(location.search).get("hoje")
  const p=Object.fromEntries(new Intl.DateTimeFormat("en-CA",{timeZone:"America/Sao_Paulo",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date()).map(x=>[x.type,x.value]));
  return p.year+"-"+p.month+"-"+p.day}
 let TODAY,SUN,WK,TI;// TI: 0=Monday..5=Saturday, -1=Sunday (rest)
-function calc(){TODAY=nowBR();const w=dt(TODAY).getUTCDay();TI=w==0?-1:w-1;SUN=add(TODAY,-w);WK=isoWeek(add(SUN,1))}
+function calc(){TODAY=nowBR();const w=dt(TODAY).getUTCDay();TI=w==0?(W[6]&&W[6].ids.length?6:-1):w-1;if(TI>=0&&!(W[TI]&&W[TI].ids.length))TI=-1;SUN=add(TODAY,-w);WK=isoWeek(add(SUN,1))}
 calc();
 let v="home",day=Math.max(TI,0),q="",f="Todos",done={},fin={},busy=false,msg="",last="";
 const ERR="Não foi possível salvar seu progresso. Tente novamente.";
@@ -239,8 +257,8 @@ const C=window.TREINO_CONFIG||{},TB="workout_completions",TD="workout_days",WS=(
 let sb=null;try{if(window.supabase&&C.SUPABASE_URL&&C.SUPABASE_ANON_KEY&&!/SEU-PROJETO/.test(C.SUPABASE_URL))sb=window.supabase.createClient(C.SUPABASE_URL,C.SUPABASE_ANON_KEY)}catch(e){}
 // loads the current week once from Supabase
 async function init(){try{if(!sb)throw 0;const[a,b]=await Promise.all([sb.from(TB).select("*").eq("week_identifier",WK),sb.from(TD).select("*").eq("week_start",WS())]);if(a.error||b.error)throw 0;const data=a.data,n={},f2={};
- b.data.forEach(o=>{const i=WD.indexOf(o.workout_day)-1;if(i>=0&&o.completed)f2[i]=o.completed_at||WS()});
- data.forEach(o=>{const i=WD.indexOf(o.weekday)-1;if(i>=0&&o.completed){n[dk(i,o.exercise_id)]=1;if(o.workout_date>last)last=o.workout_date}});
+ b.data.forEach(o=>{const i=wdIdx(o.workout_day);if(i>=0&&o.completed)f2[i]=o.completed_at||WS()});
+ data.forEach(o=>{const i=wdIdx(o.weekday);if(i>=0&&o.completed){n[dk(i,o.exercise_id)]=1;if(o.workout_date>last)last=o.workout_date}});
  done=n;fin=f2;cache();msg=""}catch(e){msg=ERR}draw()}
 const fdate=iso=>new Date(iso).toLocaleDateString("pt-BR",{timeZone:"America/Sao_Paulo"});
 // "Finalizar treino" box: disabled until every exercise of the day is checked
@@ -250,64 +268,54 @@ function fbox(d){const all=W[d].ids.every(i=>isD(d,i));
 // one row per (week_start, workout_day); unique key prevents duplicates
 async function fim(d){if(busy||fin[d])return;if(!W[d].ids.every(i=>isD(d,i))){msg="Complete todos os exercícios antes de finalizar o treino.";draw();return}
  busy=true;const at=new Date().toISOString();
- try{if(!sb)throw 0;const r=await sb.from(TD).upsert({user_id:UID,week_start:WS(),workout_day:WD[d+1],completed:true,completed_at:at},{onConflict:"user_id,week_start,workout_day",ignoreDuplicates:true});
+ try{if(!sb)throw 0;const r=await sb.from(TD).upsert({user_id:UID,week_start:WS(),workout_day:dName(d),completed:true,completed_at:at},{onConflict:"user_id,week_start,workout_day",ignoreDuplicates:true});
   if(r.error)throw r.error;fin[d]=at;cache();msg="Treino finalizado com sucesso! ✓"}catch(e){msg=ERR}
  busy=false;draw()}
-function wkCard(){const t=W.reduce((a,d)=>a+d.ids.length,0),n=Object.keys(done).length,nf=Object.keys(fin).length,p=Math.round(n/t*100);
- return`<section class="card rg"><div class="ring" style="--p:${p}"><span>${p}%</span></div><div class="rl"><b>Progresso da semana</b><div class="rr"><span>Treinos concluídos</span><b>${nf}/${W.length}</b></div><div class="rr"><span>Exercícios concluídos</span><b>${n}/${t}</b></div>${last?`<div class="rr"><span>Último treino</span><b>${last.split("-").reverse().join("/")}</b></div>`:""}${nf==W.length?`<div class="okt">${ic("trophy")} Semana concluída!</div>`:""}</div></section>`}
-const dk=(d,id)=>d+":"+id,isD=(d,id)=>!!done[dk(d,id)];
-function prog(d){const n=W[d].ids.filter(i=>isD(d,i)).length,t=W[d].ids.length;return`<div class="bar"><i style="width:${n/t*100}%"></i></div><div class="mu">${n} de ${t} exercícios concluídos</div>`}
+function wkCard(){const t=W.reduce((a,d)=>a+d.ids.length,0),n=W.reduce((a,d,i)=>a+d.ids.filter(k=>isD(i,k)).length,0),nw=W.filter(d=>d.ids.length).length,nf=W.filter((d,i)=>d.ids.length&&fin[i]).length,p=t?Math.round(n/t*100):0;
+ return`<section class="card rg"><div class="ring" style="--p:${p}"><span>${p}%</span></div><div class="rl"><b>Progresso da semana</b><div class="rr"><span>Treinos concluídos</span><b>${nf}/${nw}</b></div><div class="rr"><span>Exercícios concluídos</span><b>${n}/${t}</b></div>${last?`<div class="rr"><span>Último treino</span><b>${last.split("-").reverse().join("/")}</b></div>`:""}${nw>0&&nf==nw?`<div class="okt">${ic("trophy")} Semana concluída!</div>`:""}</div></section>`}
+const dDate=d=>d==6?SUN:add(SUN,d+1),dName=d=>WD[(d+1)%7],wdIdx=n=>{const i=WD.indexOf(n);return i<0?-1:(i+6)%7},dk=(d,id)=>d+":"+id,isD=(d,id)=>!!done[dk(d,id)];
+function prog(d){const n=W[d].ids.filter(i=>isD(d,i)).length,t=W[d].ids.length;return`<div class="bar"><i style="width:${t?n/t*100:0}%"></i></div><div class="mu">${n} de ${t} ${t==1?"exercício concluído":"exercícios concluídos"}</div>`}
 function card(id,d){const x=g(id),ok=d!=null&&isD(d,id);return`<div class="xc${ok?" ok":""}"><div class="xt"><div class="xi">${ic(ok?"check":"dumbbell")}</div><div class="xb"><b>${x.name}</b><div class="mu">${x.eq}</div></div><span class="tag">${x.cat}</span></div><div class="xm"><span>${x.s} séries × ${x.r}</span><span>Descanso ${x.rest}</span></div><div class="row"><button onclick="info('${id}')">Como Fazer</button><button onclick="info('${id}',1)" aria-label="Assistir vídeo de ${x.name}">${ic("play")} Assistir vídeo</button>${d!=null?`<button class="w ${ok?"done":"p"}" onclick="tog(${d},'${id}')">${ok?"Exercício concluído ✓":"Concluir exercício"}</button>`:""}</div></div>`}
-async function tog(d,id){if(busy)return;if(fin[d]){msg="Este treino já foi finalizado.";draw();return}busy=true;const k=dk(d,id),on=!done[k],date=add(SUN,d+1);
+async function tog(d,id){if(busy)return;if(fin[d]){msg="Este treino já foi finalizado.";draw();return}busy=true;const k=dk(d,id),on=!done[k],date=dDate(d);
  try{if(!sb)throw 0;let r;
-  if(on)r=await sb.from(TB).upsert({user_id:UID,workout_date:date,weekday:WD[d+1],exercise_id:id,exercise_name:E[id][0],completed:true,completed_at:new Date().toISOString(),week_identifier:WK},{onConflict:"user_id,workout_date,exercise_id"});
+  if(on)r=await sb.from(TB).upsert({user_id:UID,workout_date:date,weekday:dName(d),exercise_id:id,exercise_name:E[id][0],completed:true,completed_at:new Date().toISOString(),week_identifier:WK},{onConflict:"user_id,workout_date,exercise_id"});
   else r=await sb.from(TB).delete().eq("workout_date",date).eq("exercise_id",id);
   if(r.error)throw r.error;msg=""}catch(e){msg=ERR}
  if(on){done[k]=1;if(date>last)last=date}else delete done[k];cache();busy=false;draw()}
-// Componente único de vídeo: o player oficial é carregado como iframe do próprio YouTube.
-// O navegador envia o Referer da página para o YouTube; isso é necessário para evitar o erro 153.
-function ytOrigin(){return /^https?:$/.test(location.protocol)?location.origin:""}
-function ytId(value){
- const v=String(value||"").trim();
- if(YID.test(v))return v;
- try{
-  const u=new URL(v);
-  if(u.hostname==="youtu.be")return (u.pathname.slice(1).match(/^[A-Za-z0-9_-]{11}/)||[])[0]||"";
-  if(/(^|\.)youtube\.com$/.test(u.hostname)){
-   if(u.pathname==="/watch")return (u.searchParams.get("v")||"").match(/^[A-Za-z0-9_-]{11}/)?.[0]||"";
-   const m=u.pathname.match(/^\/(?:embed|shorts|live)\/([A-Za-z0-9_-]{11})/);return m?m[1]:"";
-  }
- }catch(e){}
- return ""
-}
-function vbox(id){const x=g(id),u=ytId(VIDEOS[id]),q="https://www.youtube.com/results?search_query="+encodeURIComponent(x.name+" como fazer execução correta");
+// Componente único de vídeo: miniatura + botão; o player oficial do YouTube só carrega ao clicar.
+function vbox(id){const x=g(id),u=VIDEOS[id],q="https://www.youtube.com/results?search_query="+encodeURIComponent(x.name+" como fazer execução correta");
  if(u){const url=(VMETA[id]&&VMETA[id].url)||"https://www.youtube.com/watch?v="+u;
   return`<div class="vb" id="vb"><button class="vth" onclick="playV('${id}')" aria-label="Assistir vídeo de ${x.name}"><img loading="lazy" decoding="async" onerror="this.remove()" src="https://i.ytimg.com/vi/${u}/hqdefault.jpg" alt=""><span class="pl">${ic("play")}</span></button></div><a class="btn p" href="${url}" target="_blank" rel="noopener">Assistir no YouTube ${ic("ext")}</a>`}
  if(VST=="loading")return'<div class="vb vno"><div><span class="mu">Carregando vídeo...</span></div></div>';
  if(VST=="err")return`<div class="vb vno"><div>${ic("play")}<b>Vídeo indisponível no momento.</b></div></div><a class="btn" href="${q}" target="_blank" rel="noopener">Buscar vídeo no YouTube ${ic("ext")}</a>`;
  return`<div class="vb vno"><div>${ic("play")}<b>Vídeo ainda não cadastrado</b><span class="mu">Busque uma demonstração deste exercício no YouTube.</span></div></div><a class="btn p" href="${q}" target="_blank" rel="noopener">Buscar vídeo no YouTube ${ic("ext")}</a>`}
-// Player oficial por iframe. Não usamos mais YT.Player para evitar que uma configuração
-// intermediária da API remova o contexto de referência necessário pelo YouTube.
-function playV(id){
- const u=ytId(VIDEOS[id]),b=$("#vb");if(!u||!b)return;
- killP();
- const o=ytOrigin();
- const params=new URLSearchParams({playsinline:"1",rel:"0",enablejsapi:"1"});
- if(o){params.set("origin",o);params.set("widget_referrer",location.href)}
- const src="https://www.youtube.com/embed/"+encodeURIComponent(u)+"?"+params.toString();
- b.innerHTML=`<iframe id="ytp" src="${src}" title="Demonstração de ${esc(g(id).name)}" loading="eager" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
- YP=$("#ytp");
-}
-function killP(){if(YP){try{YP.remove()}catch(e){}YP=null}}
+// Player oficial (IFrame Player API): o próprio YouTube cria o iframe com a origem correta (evita o Erro 153) e avisa se a incorporação é bloqueada.
+function ytApi(){if(window.YT&&YT.Player)return Promise.resolve();if(YAPI)return YAPI;
+ return YAPI=new Promise((ok,no)=>{const t=setTimeout(()=>{YAPI=null;no()},15000),prev=window.onYouTubeIframeAPIReady;
+  window.onYouTubeIframeAPIReady=()=>{clearTimeout(t);try{prev&&prev()}catch(e){}ok()};
+  const sc=document.createElement("script");sc.src="https://www.youtube.com/iframe_api";sc.async=true;sc.onerror=()=>{clearTimeout(t);YAPI=null;no()};document.head.appendChild(sc)})}
+function vfail(kind){killP();const b=$("#vb");const t=kind=="gone"?["Vídeo indisponível no momento.","Tente novamente mais tarde ou use o botão abaixo para assistir no YouTube."]:["Este vídeo não pode ser reproduzido diretamente aqui.","Use o botão abaixo para assistir no YouTube."];if(b)b.innerHTML='<div class="vno" style="position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:16px"><div>'+ic("play")+'<b>'+t[0]+'</b><span class="mu">'+t[1]+'</span></div></div>'}
+function killP(){if(YP){try{YP.destroy()}catch(e){}YP=null}}
+// Códigos de erro oficiais do YouTube: 2 id inválido | 5 erro do player HTML5 (temporário) | 100 vídeo não encontrado/privado | 101 e 150 incorporação desativada | 153 configuração do player/origem.
+// Só 101/150 (e 153 depois de uma nova tentativa) mostram "não pode ser reproduzido aqui"; 2/100/5 mostram "indisponível no momento".
+function playV(id,n){n=n||0;const u=VIDEOS[id],b=$("#vb");if(!u||!b)return;killP();b.innerHTML='<div id="ytp"></div>';
+ const pv={autoplay:1,rel:0,playsinline:1,modestbranding:1};if(/^https?:$/.test(location.protocol))pv.origin=location.origin;
+ ytApi().then(()=>{if(OPEN!=id||!$("#ytp"))return;
+  try{YP=new YT.Player("ytp",{videoId:u,width:"100%",height:"100%",host:n?"https://www.youtube-nocookie.com":"https://www.youtube.com",playerVars:pv,events:{onError:e=>{if(OPEN!=id)return;const c=e&&e.data;console.warn("YouTube player error:",c,"video:",u,"tentativa:",n+1);
+   if((c==5||c==153)&&n<1){setTimeout(()=>{if(OPEN==id)playV(id,n+1)},0);return}// uma nova tentativa (153 usa o domínio de privacidade aprimorada do YouTube)
+   vfail(c==2||c==100||c==5?"gone":"emb")}}})}
+  catch(x){console.warn("YouTube player init error:",x);if(OPEN==id)vfail("emb")}
+ },x=>{console.warn("YouTube API não carregou");if(OPEN==id)vfail("emb")})}
 function info(id,play){OPEN=id;killP();const x=g(id);$("#mc").innerHTML=`<div class="mh"><div><span class="tag">${x.cat}</span><h1 class="dt">${x.name}</h1><div class="mu">${x.eq}. Músculos: ${x.mu}</div></div><button class="ib" onclick="closeM()" aria-label="Fechar">${ic("x")}</button></div><div class="mg"><div><div id="vw">${vbox(id)}</div><div class="stt"><div><b>${x.s}</b><span>Séries</span></div><div><b>${x.r}</b><span>Repetições</span></div><div><b>${x.rest}</b><span>Descanso</span></div></div></div><div><div class="sec"><h2>Como fazer</h2><ol class="steps">${x.ins.map(i=>`<li>${i}</li>`).join("")}</ol></div><div class="sec"><h2>Erros comuns</h2><ul>${x.mis.map(i=>`<li>${i}</li>`).join("")}</ul></div><div class="sec"><h2>Dica de execução</h2><p>${x.tip}</p><h2 style="margin-top:14px">Respiração</h2><p>Expire no momento do esforço e inspire ao voltar. Não prenda o ar.</p></div></div></div>`;$("#md").classList.add("on");$("#md>div").scrollTop=0;if(play&&VIDEOS[id])playV(id)}
 function closeM(){killP();OPEN=null;$("#md").classList.remove("on");$("#mc").innerHTML=""}$("#md").onclick=e=>{if(e.target.id=="md")closeM()};
 document.addEventListener("keydown",e=>{if(e.key=="Escape")closeM()});
 const days=()=>`<div class="scroll">${W.map((d,i)=>`<button class="chip ${i==day?"on":""}${fin[i]?" fin":""}" onclick="ANIM=1;day=${i};draw()">${d.n.split("-")[0]}${fin[i]?" ✓":""}</button>`).join("")}</div>`;
-function draw(){if(!UID){adraw();return}document.body.classList.remove("noav");document.querySelector("nav").style.display="flex";document.querySelectorAll("nav button[data-v]").forEach(b=>b.classList.toggle("on",b.dataset.v==v));const D=W[day];let h="";
-if(v=="home")h=`<header class="hd"><h1>Olá${PF.display_name?", "+esc(PF.display_name):""}!</h1><p class="mu">Hoje é mais um dia para se tornar sua melhor versão.</p></header><div class="g2"><section class="hero">${bgMedia()}<div class="hc">${TI<0?'<div class="lbl">Hoje</div><div class="big">Dia de descanso</div><p>Nova semana começa amanhã. Bom descanso!</p>':`<div class="lbl">Treino de hoje, ${W[TI].n.toLowerCase()}</div><div class="big">${W[TI].t}</div><div class="mu">${W[TI].ids.length} exercícios</div>${prog(TI)}<div class="row" style="margin-top:14px"><button class="p" onclick="ANIM=1;day=${TI};v='week';draw()">Começar treino</button><button onclick="ANIM=1;v='ex';draw()">Ver exercícios</button></div>`}</div></section>${wkCard()}</div><h2>Seus treinos da semana</h2><div class="wk">${W.map((d,i)=>{const n=d.ids.filter(k=>isD(i,k)).length,t=d.ids.length;return`<button class="dy${i==TI?" td":""}${fin[i]?" fn":""}" onclick="ANIM=1;day=${i};v='week';draw()"><b>${d.n.slice(0,3)}</b><small>${d.t}</small><span class="st">${fin[i]?ic("check")+"Concluído":(i==TI?"Hoje":"")}</span><div class="bar"><i style="width:${n/t*100}%"></i></div></button>`}).join("")}</div><div class="card" style="margin-top:16px"><b>Período de readaptação</b><p class="mu">Comece com cargas leves e priorize a execução correta dos exercícios. Aumente a carga gradualmente conforme seu corpo se readapta.</p></div>`;
-else if(v=="week")h=`<header class="hd"><h1>${D.n}</h1><p class="mu">${D.t}</p></header>${days()}${prog(day)}<div style="height:10px"></div><div class="xl">${D.ids.map(i=>card(i,day)).join("")}</div><div style="height:12px"></div>${fbox(day)}`;
+function draw(){if(!UID){adraw();return}if(v=="admin"&&!ISADM)v="home";$("#navAdm").hidden=!ISADM;document.body.classList.remove("noav");document.querySelector("nav").style.display="flex";document.querySelectorAll("nav button[data-v]").forEach(b=>b.classList.toggle("on",b.dataset.v==v));const D=W[day];let h="";
+if(v=="home")h=`<header class="hd"><h1>Olá${PF.display_name?", "+esc(PF.display_name):""}!</h1><p class="mu">Hoje é mais um dia para se tornar sua melhor versão.</p></header><div class="g2"><section class="hero">${bgMedia()}<div class="hc">${TI<0?'<div class="lbl">Hoje</div><div class="big">Dia de descanso</div><p>Nova semana começa amanhã. Bom descanso!</p>':`<div class="lbl">Treino de hoje, ${W[TI].n.toLowerCase()}</div><div class="big">${W[TI].t}</div><div class="mu">${W[TI].ids.length} ${W[TI].ids.length==1?"exercício":"exercícios"}</div>${prog(TI)}<div class="row" style="margin-top:14px"><button class="p" onclick="ANIM=1;day=${TI};v='week';draw()">Começar treino</button><button onclick="ANIM=1;v='ex';draw()">Ver exercícios</button></div>`}</div></section>${wkCard()}</div><h2>Seus treinos da semana</h2><div class="wk">${W.map((d,i)=>{const n=d.ids.filter(k=>isD(i,k)).length,t=d.ids.length;return`<button class="dy${i==TI?" td":""}${fin[i]?" fn":""}" onclick="ANIM=1;day=${i};v='week';draw()"><b>${d.n.slice(0,3)}</b><small>${d.t}</small><span class="st">${fin[i]?ic("check")+"Concluído":(!t?"Descanso":i==TI?"Hoje":"")}</span><div class="bar"><i style="width:${t?n/t*100:0}%"></i></div></button>`}).join("")}</div><div class="card" style="margin-top:16px"><b>Período de readaptação</b><p class="mu">Comece com cargas leves e priorize a execução correta dos exercícios. Aumente a carga gradualmente conforme seu corpo se readapta.</p></div>`;
+else if(v=="week")h=`<header class="hd"><h1>${D.n}</h1><p class="mu">${D.t}</p></header>${days()}${D.notes?'<div class="card"><b>Observações</b><p class="mu">'+D.notes+'</p></div>':""}${D.ids.length?`${prog(day)}<div style="height:10px"></div><div class="xl">${D.ids.map(i=>card(i,day)).join("")}</div><div style="height:12px"></div>${fbox(day)}`:'<div class="card"><b>Dia de descanso</b><p class="mu">Sem treino hoje. Aproveite para recuperar.</p></div>'}`;
 else if(v=="ex")h=`<header class="hd"><h1>Exercícios</h1><p class="mu">Veja como fazer cada movimento e assista ao vídeo.</p></header><div class="sb">${ic("search")}<input id="s" type="search" autocomplete="off" placeholder="Buscar exercício..." aria-label="Buscar exercício" value="${esc(q)}" oninput="q=this.value;renderList()"></div><div class="scroll">${["Todos","Glúteos","Pernas","Costas","Ombros","Abdômen","Braços"].map(c=>`<button class="chip ${c==f?"on":""}" onclick="f='${c}';draw()">${c}</button>`).join("")}</div><div id="l" class="xl"></div>`;
 else if(v=="perfil")h=perfilH();
+else if(v=="admin")h=adminH();
 else h=`<header class="hd"><h1>Descanso</h1><p class="mu">Cronometre o intervalo entre as séries.</p></header><div class="card"><div id="tm">01:00</div><div class="scroll" style="justify-content:center;margin-top:8px">${[30,45,60,90,120].map(s=>`<button class="chip ${s==T.d?"on":""}" onclick="setT(${s})">${s}s</button>`).join("")}</div><div class="row" style="justify-content:center"><button class="p" onclick="startT()">Iniciar</button><button onclick="pauseT()">Pausar</button><button onclick="resetT()">Reiniciar</button></div></div>`;
 app.className=ANIM?"an":"";ANIM=0;
 app.innerHTML=avBtn()+(msg?'<div class="card msg">'+msg+'</div>':"")+h;if(v=="ex")renderList();if(v=="rest")showT()}
@@ -351,9 +359,9 @@ async function loadUser(u){CK="treino_cache_"+u.id;done={};fin={};last="";loadCa
  try{const{data,error}=await sb.from("profiles").select("display_name,avatar_url,theme_color").eq("user_id",u.id).maybeSingle();if(error)throw error;
   if(data){PF.display_name=data.display_name||PF.display_name;PF.avatar_url=data.avatar_url||"";PF.theme_color=data.theme_color||PF.theme_color}}
  catch(e){console.error(e);msg="Não foi possível carregar seus dados."}
- if(LEGACY.includes(PF.theme_color))PF.theme_color=DEF;applyTheme();loadVideos();await init()}
+ if(LEGACY.includes(PF.theme_color))PF.theme_color=DEF;applyTheme();loadVideos();loadAdmin();await loadPlan();await init()}
 async function sess(ev,ses){const u=ses&&ses.user;
- if(!u){if(UID&&!manual)amsg="Você foi desconectado. Entre novamente.";manual=false;UID=null;done={};fin={};last="";PF={display_name:"",avatar_url:"",theme_color:DEF};EM="";closeMt();applyTheme();v="home";av="login";adraw();return}
+ if(!u){if(UID&&!manual)amsg="Você foi desconectado. Entre novamente.";manual=false;UID=null;done={};fin={};last="";PF={display_name:"",avatar_url:"",theme_color:DEF};EM="";ISADM=false;ADM=ADM0();W=W0;calc();closeMt();applyTheme();v="home";av="login";adraw();return}
  if(u.id!=UID){UID=u.id;await loadUser(u)}
  startMotiv();
  if(ev=="PASSWORD_RECOVERY"){v="perfil";msg="Defina sua nova senha abaixo."}
@@ -367,6 +375,99 @@ async function upAv(i){const f=i.files[0];if(!f)return;if(!/^image\/(jpeg|png|we
 async function chgPw(){const a=$("#n1").value,b=$("#n2").value;if(!a||!b){msg="Preencha todos os campos.";return draw()}if(a!=b){msg="As senhas não coincidem.";return draw()}if(a.length<6){msg="A senha deve ter pelo menos 6 caracteres.";return draw()}
  const{error}=await sb.auth.updateUser({password:a});if(error)console.error(error);msg=error?"Não foi possível alterar a senha.":"Senha alterada com sucesso.";draw()}
 const perfilH=()=>`<header class="hd"><h1>Meu perfil</h1><p class="mu">Gerencie suas informações e personalize sua experiência.</p></header><div class="g3"><section class="card pc"><div class="bigav">${PF.avatar_url?'<img src="'+esc(PF.avatar_url)+'" alt="">':esc((PF.display_name||"?")[0].toUpperCase())}</div><b>${esc(PF.display_name||"")}</b><div class="mu">${esc(EM)}</div><button style="margin-top:14px;width:100%" onclick="logout()">${ic("logout")} Sair</button></section><section class="card"><b>Editar perfil</b><input id="pn" placeholder="Nome" maxlength="40" value="${esc(PF.display_name)}" style="margin-top:8px"><button class="p" onclick="saveName()">Salvar nome</button><p class="mu" style="margin-top:14px">Foto de perfil (JPG, PNG ou WEBP, até 2 MB)</p><input id="pf" type="file" accept="image/jpeg,image/png,image/webp" onchange="upAv(this)"></section><section class="card"><b>Alterar senha</b><input id="n1" type="password" placeholder="Nova senha" autocomplete="new-password" style="margin-top:8px"><input id="n2" type="password" placeholder="Confirmar nova senha" autocomplete="new-password"><button class="p" onclick="chgPw()">Alterar senha</button></section><section class="card"><b>Personalizar aparência</b><p class="mu">Escolha a cor do seu tema.</p><div class="row" style="margin-top:8px">${Object.entries(THEMES).map(([n,c])=>`<button class="sw${c==PF.theme_color?" on":""}" style="background:${c};color:#fff" title="${n}" aria-label="Cor ${n}" onclick="setTheme('${c}')">${c==PF.theme_color?ic("check"):""}</button>`).join("")}</div></section></div>`;
+// ================= Treino individual do aluno + área do Administrador =================
+// O plano do aluno vem do Supabase (student_plans / student_plan_days / student_plan_exercises).
+// Sem plano personalizado, o app usa o treino padrão W0. Quem é admin é decidido pelo banco (rpc is_admin), nunca pelo front-end.
+const ADN=["Segunda-feira","Terça-feira","Quarta-feira","Quinta-feira","Sexta-feira","Sábado","Domingo"];// índice 0..6 = coluna weekday do banco
+const clone=o=>JSON.parse(JSON.stringify(o)),low=i=>ADN[i].toLowerCase();
+function rowsToDraft(rows){const dr=ADN.map(()=>({title:"",notes:"",ids:[]}));(rows||[]).forEach(r=>{const d=dr[r.weekday];if(!d)return;d.title=r.title||"";d.notes=r.notes||"";d.ids=(r.student_plan_exercises||[]).slice().sort((a,b)=>a.position-b.position).map(x=>x.exercise_id).filter(id=>E[id])});return dr}
+function buildW(rows){const out=[];rowsToDraft(rows).forEach((d,i)=>{if(i==6&&!d.ids.length)return;out.push({n:ADN[i],t:d.ids.length?esc(d.title||"Treino"):"Descanso",ids:d.ids,notes:esc(d.notes)})});return out}
+async function loadPlan(){W=W0;
+ try{if(!sb)throw 0;const[a,b]=await Promise.all([sb.from("student_plans").select("user_id").eq("user_id",UID).maybeSingle(),sb.from("student_plan_days").select("weekday,title,notes,student_plan_exercises(exercise_id,position)").eq("user_id",UID)]);
+  if(a.error||b.error)throw 0;if(a.data)W=buildW(b.data||[])}catch(e){console.warn("Usando o treino padrão.")}
+ calc();day=Math.max(TI,0)}
+const ADM0=()=>({q:"",busy:false,err:"",ok:"",st:null,draft:null,orig:null,custom:false,d:0,pk:null,pq:"",log:[],dg:null,sum:[]});
+let ISADM=false,ADM=ADM0();
+async function loadAdmin(){ISADM=false;ADM=ADM0();try{if(sb){const r=await sb.rpc("is_admin");ISADM=!r.error&&r.data===true}}catch(e){}const n=$("#navAdm");if(n)n.hidden=!ISADM}
+const defDraft=()=>ADN.map((n,i)=>i<6?{title:W0[i].t,notes:"",ids:W0[i].ids.slice()}:{title:"",notes:"",ids:[]});
+const normDraft=dr=>dr.map(d=>{const ids=d.ids.slice(),t=(d.title||"").trim(),n=(d.notes||"").trim();return ids.length?{title:t||"Treino",notes:n,ids}:{title:"",notes:"",ids:[]}});
+function admDiff(){const o=normDraft(ADM.orig),n=normDraft(ADM.draft),out=[],nm=id=>E[id]?E[id][0]:id,where=P=>{const m={};P.forEach((d,i)=>d.ids.forEach(id=>(m[id]=m[id]||[]).push(i)));return m},wo=where(o),wn=where(n);
+ new Set([...Object.keys(wo),...Object.keys(wn)]).forEach(id=>{const a=wo[id]||[],b=wn[id]||[],rem=a.filter(x=>!b.includes(x)),add=b.filter(x=>!a.includes(x)),k=Math.min(rem.length,add.length);
+  for(let j=0;j<k;j++)out.push("Movido de "+low(rem[j])+" para "+low(add[j])+": "+nm(id));
+  rem.slice(k).forEach(x=>out.push("Removido de "+low(x)+": "+nm(id)));add.slice(k).forEach(x=>out.push("Adicionado em "+low(x)+": "+nm(id)))});
+ n.forEach((d,i)=>{if(!d.ids.length&&!o[i].ids.length)return;const a=o[i].ids.filter(x=>d.ids.includes(x)),b=d.ids.filter(x=>o[i].ids.includes(x));
+  if(a.join()!=b.join())out.push("Ordem dos exercícios alterada em "+low(i));
+  if(d.ids.length&&o[i].ids.length&&d.title!=o[i].title)out.push("Nome do treino de "+low(i)+" alterado para \""+d.title+"\"");
+  if(d.ids.length&&o[i].ids.length&&d.notes!=o[i].notes)out.push("Observações do treino de "+low(i)+" alteradas")});
+ return out}
+const chg=()=>{ADM.ok="";ADM.err=""};
+const dlg=h=>{$("#mc").innerHTML='<div style="max-width:560px;margin:0 auto">'+h+'</div>';$("#md").classList.add("on")};
+const dlgBtns=(ok,fn,cls)=>`<div class="row" style="margin-top:16px;justify-content:flex-end"><button onclick="closeM()">Cancelar</button><button class="${cls||"p"}" onclick="${fn}">${ok}</button></div>`;
+// ---- busca e carregamento ----
+async function admSearch(){const el=$("#adm-q"),em=(el?el.value:ADM.q).trim();
+ if(ADM.draft&&ADM.st&&admDiff().length&&!confirm("Há alterações não salvas. Deseja descartá-las?"))return;
+ ADM.q=em;ADM.st=null;ADM.draft=null;ADM.orig=null;ADM.ok="";ADM.err="";
+ if(!/^\S+@\S+\.\S+$/.test(em)){ADM.err="Digite um e-mail válido.";draw();return}
+ ADM.busy=true;draw();
+ try{const r=await sb.rpc("admin_find_student",{p_email:em});if(r.error)throw r.error;ADM.st=(r.data&&r.data[0])||null;if(!ADM.st)ADM.err="Nenhum aluno encontrado com este e-mail."}
+ catch(e){console.error(e);ADM.err="Não foi possível buscar o aluno. Tente novamente."}
+ ADM.busy=false;draw()}
+async function admLoadLog(){try{const r=await sb.from("admin_audit_log").select("admin_email,action,details,created_at").eq("student_id",ADM.st.user_id).order("created_at",{ascending:false}).limit(5);ADM.log=r.error?[]:(r.data||[])}catch(e){ADM.log=[]}}
+async function admEdit(){ADM.busy=true;ADM.err="";ADM.ok="";draw();const uid=ADM.st.user_id;
+ try{const[a,b]=await Promise.all([sb.from("student_plans").select("user_id").eq("user_id",uid).maybeSingle(),sb.from("student_plan_days").select("weekday,title,notes,student_plan_exercises(exercise_id,position)").eq("user_id",uid)]);
+  if(a.error||b.error)throw a.error||b.error;ADM.custom=!!a.data;ADM.draft=ADM.custom?rowsToDraft(b.data):defDraft();ADM.orig=clone(ADM.draft);ADM.d=Math.max(ADM.draft.findIndex(d=>d.ids.length),0);await admLoadLog()}
+ catch(e){console.error(e);ADM.err="Não foi possível carregar o treino do aluno. Tente novamente."}
+ ADM.busy=false;draw()}
+// ---- edição (só no rascunho; nada é salvo até clicar em "Salvar alterações") ----
+function admDay(i){ADM.d=i;chg();draw()}
+function admAdd(){ADM.pk={mode:"add",i:-1};ADM.pq="";admPickOpen()}
+function admRep(i){ADM.pk={mode:"rep",i};ADM.pq="";admPickOpen()}
+function admPickOpen(){const P=ADM.pk;dlg(`<div class="mh"><div><h1 class="dt" style="font-size:1.7rem">${P.mode=="rep"?"Substituir exercício":"Adicionar exercício"}</h1><div class="mu">${ADN[ADM.d]}</div></div><button class="ib" onclick="closeM()" aria-label="Fechar">${ic("x")}</button></div><div class="sb">${ic("search")}<input id="pk-q" type="search" autocomplete="off" placeholder="Buscar exercício..." aria-label="Buscar exercício" oninput="ADM.pq=this.value;admPkList()"></div><div id="pk-l" style="display:grid;gap:8px;max-height:52vh;overflow:auto"></div>`);admPkList()}
+function admPkList(){const t=normalizeSearch(ADM.pq).split(" ").filter(Boolean),cur=ADM.draft[ADM.d].ids,L=K.filter(k=>t.every(w=>SIX[k].includes(w)));
+ $("#pk-l").innerHTML=L.length?L.map(k=>{const x=g(k),dis=cur.includes(k);return`<button class="pkr" ${dis?"disabled":""} onclick="admPick('${k}')"><b>${x.name}</b><span class="mu">${x.cat}. ${x.eq}${dis?" (já está neste treino)":""}</span></button>`}).join(""):'<p class="mu">Nenhum exercício encontrado.</p>'}
+function admPick(id){const D=ADM.draft[ADM.d],P=ADM.pk;if(!E[id]||D.ids.includes(id))return;chg();
+ if(P.mode=="rep")D.ids[P.i]=id;else{D.ids.push(id);if(!D.title.trim())D.title="Treino de "+low(ADM.d)}closeM();draw()}
+function admRm(i){ADM.pk={i};dlg(`<h1 class="dt" style="font-size:1.6rem">Remover exercício</h1><p style="margin-top:10px">Tem certeza que deseja remover este exercício do treino de ${low(ADM.d)}?</p><p class="mu"><b>${E[ADM.draft[ADM.d].ids[i]][0]}</b> sai apenas do treino deste aluno.</p>${dlgBtns("Remover exercício","admRmOk()","p")}`)}
+function admRmOk(){chg();ADM.draft[ADM.d].ids.splice(ADM.pk.i,1);closeM();draw()}
+function admUp(i,dir){const a=ADM.draft[ADM.d].ids,j=i+dir;if(j<0||j>=a.length)return;chg();[a[i],a[j]]=[a[j],a[i]];draw()}
+function admDrop(j){const g0=ADM.dg;ADM.dg=null;if(!g0||g0[0]!=ADM.d||g0[1]==j)return;chg();const a=ADM.draft[ADM.d].ids,[x]=a.splice(g0[1],1);a.splice(j,0,x);draw()}
+const dayOpts=ex=>ADN.map((n,i)=>i==ex?"":`<option value="${i}">${n}</option>`).join("");
+function admMv(i){ADM.pk={i};dlg(`<h1 class="dt" style="font-size:1.6rem">Mover exercício</h1><p class="mu" style="margin-top:8px"><b>${E[ADM.draft[ADM.d].ids[i]][0]}</b> sai de ${low(ADM.d)}.</p><label class="lb" for="mv-t">Mover para:</label><select id="mv-t">${dayOpts(ADM.d)}</select><p id="mv-e" class="mu" style="color:#ff8a93"></p>${dlgBtns("Mover exercício","admMvOk()","p")}`)}
+function admMvOk(){const t=+$("#mv-t").value,D=ADM.draft[ADM.d],id=D.ids[ADM.pk.i],T=ADM.draft[t];
+ if(T.ids.includes(id)){$("#mv-e").textContent="Este exercício já está no treino de "+low(t)+".";return}
+ chg();D.ids.splice(ADM.pk.i,1);T.ids.push(id);if(!T.title.trim())T.title="Treino de "+low(t);closeM();ADM.d=t;draw()}
+function admSw(){dlg(`<h1 class="dt" style="font-size:1.6rem">Mudar dia da semana</h1><p class="mu" style="margin-top:8px">O treino de ${low(ADM.d)} será levado para o dia escolhido. Se o dia já tiver treino, os dois trocam de lugar.</p><label class="lb" for="mv-t">Novo dia:</label><select id="mv-t">${dayOpts(ADM.d)}</select>${dlgBtns("Mudar dia","admSwOk()","p")}`)}
+function admSwOk(){const t=+$("#mv-t").value,a=ADM.draft;chg();[a[ADM.d],a[t]]=[a[t],a[ADM.d]];closeM();ADM.d=t;draw()}
+function admClr(){dlg(`<h1 class="dt" style="font-size:1.6rem">Remover dia de treino</h1><p style="margin-top:10px">Tem certeza que deseja remover o treino de ${low(ADM.d)}? O dia ficará como descanso.</p>${dlgBtns("Remover dia","admClrOk()","p")}`)}
+function admClrOk(){chg();ADM.draft[ADM.d]={title:"",notes:"",ids:[]};closeM();draw()}
+function admDiscard(){chg();ADM.draft=clone(ADM.orig);draw()}
+// ---- salvar ----
+function admSummary(){const c=admDiff();chg();
+ if(!c.length){ADM.err="Nenhuma alteração para salvar.";draw();return}
+ ADM.sum=c;dlg(`<h1 class="dt" style="font-size:1.6rem">Salvar alterações</h1><p style="margin-top:10px">Você está alterando o treino de <b>${esc(ADM.st.display_name)}</b>.</p><p class="mu" style="margin:8px 0 4px">Alterações:</p><ul>${c.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>${dlgBtns("Salvar alterações","admSave()","p")}`)}
+async function admSave(){if(ADM.busy)return;ADM.busy=true;const dr=normDraft(ADM.draft),days=dr.map((d,i)=>({weekday:i,title:d.title,notes:d.notes,exercises:d.ids})).filter(d=>d.exercises.length);
+ try{const r=await sb.rpc("admin_save_student_plan",{p_user:ADM.st.user_id,p_plan:days,p_summary:ADM.sum});if(r.error)throw r.error;
+  ADM.draft=dr;ADM.orig=clone(dr);ADM.custom=true;ADM.ok="Treino atualizado com sucesso.";ADM.err="";if(ADM.st.user_id==UID)await loadPlan();await admLoadLog()}
+ catch(e){console.error(e);ADM.err="Não foi possível salvar as alterações. Tente novamente.";ADM.ok=""}
+ ADM.busy=false;closeM();draw()}
+// ---- tela ----
+function adminH(){const A=ADM,st=A.st;
+ let h=`<header class="hd"><h1>Administrador</h1><p class="mu">Gerenciar treinos dos alunos</p></header><section class="card"><b>Buscar aluno</b><div class="sb" style="margin-top:8px">${ic("search")}<input id="adm-q" type="email" autocomplete="off" placeholder="Digite o e-mail do aluno" aria-label="E-mail do aluno" value="${esc(A.q)}" onkeydown="if(event.key=='Enter')admSearch()"></div><button class="p" onclick="admSearch()" ${A.busy?"disabled":""}>${A.busy&&!st?"Buscando...":"Buscar aluno"}</button></section>`;
+ if(A.err&&!A.draft)h+=`<div class="card errbox">${A.err}</div>`;
+ if(!st)return h;
+ h+=`<section class="card"><b>Aluno encontrado</b><div class="rr" style="margin-top:8px"><span>Nome</span><b>${esc(st.display_name)}</b></div><div class="rr"><span>E-mail</span><b>${esc(st.email)}</b></div><div class="rr"><span>Status da conta</span><b>${esc(st.status)}</b></div>${A.draft?"":`<button class="p" style="margin-top:12px" onclick="admEdit()" ${A.busy?"disabled":""}>${A.busy?"Carregando...":"Editar treino"}</button>`}</section>`;
+ if(!A.draft)return h;
+ const d=A.d,D=A.draft[d];
+ h+=`${A.ok?`<div class="card okbox">${A.ok}</div>`:""}${A.err?`<div class="card errbox">${A.err}</div>`:""}<h2>Treino de ${esc(st.display_name)}</h2>${A.custom?"":'<p class="mu">Este aluno ainda usa o treino padrão. Ao salvar, será criado um treino personalizado só para ele.</p>'}
+ <div class="adg">${ADN.map((n,i)=>{const x=A.draft[i];return`<button class="ad ${i==d?"on":""}" onclick="admDay(${i})"><b>${n.toUpperCase()}</b><span class="mu">${x.ids.length?esc(x.title||"Treino"):"Descanso"}</span>${x.ids.map(id=>`<span class="ex">${E[id][0]}</span>`).join("")}</button>`}).join("")}</div>
+ <section class="card"><b>${ADN[d]}</b>${D.ids.length?"":'<p class="mu" style="margin:8px 0">Dia de descanso. Adicione um exercício para criar um treino neste dia.</p>'}
+ <label class="lb" for="adm-t">Nome do treino</label><input id="adm-t" maxlength="80" placeholder="Ex.: Treino de Pernas A" value="${esc(D.title)}" oninput="ADM.draft[${d}].title=this.value">
+ <label class="lb" for="adm-n">Observações (opcional)</label><textarea id="adm-n" maxlength="500" placeholder="Ex.: Foco em quadríceps" oninput="ADM.draft[${d}].notes=this.value">${esc(D.notes)}</textarea>
+ ${D.ids.map((id,i)=>{const x=g(id);return`<div class="adx" draggable="true" ondragstart="ADM.dg=[${d},${i}]" ondragover="event.preventDefault()" ondrop="admDrop(${i})"><span class="gr" aria-hidden="true">⋮⋮</span><div class="xb"><b>${i+1}. ${x.name}</b><div class="mu">${x.cat}. ${x.eq}</div></div><div class="ab"><button class="sm" onclick="admUp(${i},-1)" ${i==0?"disabled":""} aria-label="Subir exercício">↑</button><button class="sm" onclick="admUp(${i},1)" ${i==D.ids.length-1?"disabled":""} aria-label="Descer exercício">↓</button><button class="sm" onclick="admRep(${i})">Substituir</button><button class="sm" onclick="admMv(${i})">Mover</button><button class="sm danger" onclick="admRm(${i})">Remover</button></div></div>`}).join("")}
+ <div class="row" style="margin-top:6px"><button onclick="admAdd()">${D.ids.length?"+ Adicionar exercício":"+ Adicionar dia de treino"}</button>${D.ids.length?'<button onclick="admSw()">Mudar dia da semana</button><button class="danger" onclick="admClr()">Remover dia de treino</button>':""}</div></section>
+ <div class="row"><button class="p" onclick="admSummary()" ${A.busy?"disabled":""}>Salvar alterações</button><button onclick="admDiscard()">Descartar alterações</button></div>
+ ${A.log.length?`<h2>Últimas alterações</h2><section class="card">${A.log.map(l=>`<div class="rr"><span>${fdate(l.created_at)}, ${esc(l.admin_email||"")}</span><b>${l.action=="plan_update"?"Treino atualizado":esc(l.action)} (${((l.details&&l.details.changes)||[]).length})</b></div>`).join("")}</section>`:""}`;
+ return h}
 function boot(){document.querySelector("nav").style.display="none";document.body.classList.add("noav");try{localStorage.removeItem("treino_cache")}catch(e){}// drop old shared cache
  if(!sb){app.innerHTML='<p class="card">Não foi possível carregar seus dados. Verifique a configuração do Supabase.</p>';return}
  app.innerHTML='<p class="mu" style="padding:20px">Carregando...</p>';
