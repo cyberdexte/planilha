@@ -1,5 +1,0 @@
-/*
-  YouTube requires an HTTP Referer for embedded playback.
-  Keep the normal browser referrer on cross-origin requests.
-*/
-  Referrer-Policy: strict-origin-when-cross-origin
