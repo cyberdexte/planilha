@@ -1,0 +1,21 @@
+[build]
+  command = "node build.js"
+  publish = "public"
+
+# PWA: o service worker e o HTML nunca devem ficar presos no cache HTTP do navegador
+[[headers]]
+  for = "/service-worker.js"
+  [headers.values]
+    Cache-Control = "no-cache"
+    Service-Worker-Allowed = "/"
+
+[[headers]]
+  for = "/manifest.webmanifest"
+  [headers.values]
+    Content-Type = "application/manifest+json"
+    Cache-Control = "no-cache"
+
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Cache-Control = "no-cache"
