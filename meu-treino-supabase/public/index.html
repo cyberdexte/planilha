@@ -787,7 +787,7 @@ function admSummary(){const c=admDiff();chg();
 async function admSave(){if(ADM.busy)return;ADM.busy=true;const dr=normDraft(ADM.draft),days=dr.map((d,i)=>({weekday:i,title:d.title,notes:d.notes,exercises:d.ids})).filter(d=>d.exercises.length);
  try{const r=await sb.rpc("admin_save_student_plan",{p_user:ADM.st.user_id,p_plan:days,p_summary:ADM.sum});if(r.error)throw r.error;
   ADM.draft=dr;ADM.orig=clone(dr);ADM.custom=true;ADM.ok="Treino atualizado com sucesso.";ADM.err="";if(ADM.st.user_id==UID)await loadPlan();await admLoadLog()}
- catch(e){console.error(e);ADM.err="Não foi possível salvar as alterações. Tente novamente.";ADM.ok=""}
+ catch(e){console.error(e);ADM.err="Não foi possível salvar as alterações. Tente novamente."+(e&&(e.code||e.message)?" (Detalhe técnico: "+[e.code,e.message].filter(Boolean).join(" – ").slice(0,220)+")":"");ADM.ok=""}
  ADM.busy=false;closeM();draw()}
 // ---- tela ----
 function adminH(){const A=ADM,st=A.st,T0=adminTop();let h=T0.h;if(T0.stop)return h;
